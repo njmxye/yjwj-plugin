@@ -1,0 +1,9 @@
+{
+  "name": "yjwj-plugin",
+  "version": "0.0.1",
+  "description": "Yunzai-Bot 的永劫无间插件",
+  "main": "index.js",
+  "type": "module",
+  "dependencies": {},
+  "author": "njmxye"
+}

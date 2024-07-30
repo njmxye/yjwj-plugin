@@ -1,0 +1,41 @@
+async update_config(e) {
+    await e.reply('正在更新配置文件……')
+    try {
+        // 使用 execSync 确保命令执行完再继续后面的步骤。
+        let output0 = execSync('source /root/path/to/venv/bin/activate');
+        let output05 = execSync('pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt');
+        let output1 = execSync('python ./plugins/yjwj-plugin/apps/imgv1.2.py');
+        let output2 = execSync('ls');
+        e.reply("图源更新成功");
+        e.reply("执行 'source /root/path/to/venv/bin/activate' 的输出：\n", output0.toString());
+        e.reply("执行 'pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt' 的输出：\n", output05.toString());
+        e.reply("执行 'python imgv1.2.py' 的输出：\n", output1.toString());
+        e.reply("执行 'ls' 的输出：\n", output2.toString());
+    } catch (err) {
+        console.error("图源更新出错：", err);
+        e.reply("图源更新出错");
+        // 如果需要，你可以选择在这里输出错误信息
+        e.reply(err.toString());
+    }
+}
+
+async update_config(e) {
+    await e.reply('正在更新配置文件……')
+    try {
+        // 使用 execSync 确保命令执行完再继续后面的步骤。
+        let output1 = execSync('python ./plugins/yjwj-plugin/apps/imgv1.2.py');
+        let output2 = execSync('ls');
+        e.reply("图源更新成功");
+        e.reply("执行 'python imgv1.2.py' 的输出：\n", output1.toString());
+        e.reply("执行 'ls' 的输出：\n", output2.toString());
+    } catch (err) {
+        console.error("图源更新出错：", err);
+        e.reply("图源更新出错");
+        // 如果需要，你可以选择在这里输出错误信息
+        e.reply(err.toString());
+    }
+}
+
+                    reg: '^#劫更新数据.*$',
+                    fnc: 'update_config'
+                }
