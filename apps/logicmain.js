@@ -6,6 +6,7 @@ import fetch from 'node-fetch'
 import os from 'os'
 // 检查是否有data/ys-dio-pic文件夹，没有则创建
 let imgfol = './data/yjwjimg'
+let memeDir = './plugins/yjwj-plugin/sundry/meme'
 if (!fs.existsSync(imgfol)) {
   fs.mkdirSync(imgfol)
 }
@@ -34,9 +35,20 @@ export class setting extends plugin {
                     reg: '^永劫更新数据.*$',
                     fnc: 'update_config'
                 },
+                {
+                    reg: '^表情$',
+                    fnc: 'meme'
+                },
             ]
         })
     }
+
+    async meme(e) {
+        // 随机从表情包中选择一张图片发送
+        let metu = fs.readdirSync(memeDir)
+        let metuPath = path.join(memeDir, metu[Math.floor(Math.random() * metu.length)])
+        e.reply(segment.image(metuPath))
+      }
 
     async imgmanual(e) {
     if (fs.existsSync('urlconfig.json')) {  
