@@ -5,7 +5,9 @@ import path from 'path'
 import fetch from 'node-fetch'
 import os from 'os'
 // 检查是否有data/ys-dio-pic文件夹，没有则创建
+
 let imgfol = './data/yjwjimg'
+let queue = './plugins/yjwj-plugin/sundry/queue.json'
 let memeDir = './plugins/yjwj-plugin/sundry/meme'
 if (!fs.existsSync(imgfol)) {
   fs.mkdirSync(imgfol)
@@ -39,10 +41,71 @@ export class setting extends plugin {
                     reg: '^表情$',
                     fnc: 'meme'
                 },
+                {
+                    reg: '^#排队$',
+                    fnc:'queue'
+                },
+                {
+                    reg: '^#取消$',
+                    fnc: 'queueout'
+                },
+                {
+                    reg: '^#排队列表$',
+                    fnc: 'queuelist_total'
+                },
+                {
+                    reg: '^#手游列表$',
+                    fnc: 'queuelist_mobile'
+                },
+                {
+                    reg: '^#端游列表$',
+                    fnc: 'queuelist_pc'
+                },
+                {
+                    reg: '^#自定义房间列表$',
+                    fnc: 'custom_room_list'
+                },
+                {
+                    reg: '^#自定义房间添加$',
+                    fnc: 'custom_room_add'
+                },
+                {
+                    reg: '^#自定义房间删除$',
+                    fnc: 'custom_room_del'
+                },
+                {
+                    reg: '^#排行榜列表$',
+                    fnc: 'chart_list'
+                },
+                {
+                    reg: '^#排行榜添加$',
+                    fnc: 'chart_add'
+                },
+                {
+                    reg: '^#排行榜删除$',
+                    fnc: 'chart_del'
+                },
+                {
+                    reg: '^逆天.*$',
+                    fnc: 'tieba_sb'
+                },
+                {
+                    reg: '^劫批.*$',
+                    fnc: 'tieba_jb'
+                }
             ]
         })
     }
 
+    async queue(e) {
+        e.reply('正在写入数据库……')
+        
+        e.reply('排队成功')
+
+    }
+    async queueout(e) {
+        e.reply('功能没写完')
+    }
     async meme(e) {
         // 随机从表情包中选择一张图片发送
         let metu = fs.readdirSync(memeDir)

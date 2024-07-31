@@ -89,15 +89,14 @@ def main():
     download_images(haibao_url, haibao_folder_name, haibao_headers, cookies={})
 
     # 下载截图
-    jietu_url = "https://www.yjwujian.cn/media/#/screenshot"
+    '''jietu_url = "https://www.yjwujian.cn/media/#/screenshot"
     jietu_folder_name = "yjwujian_images/jietu"
     jietu_headers = {
         "Referer": "https://www.yjwujian.cn/media/",
         "sec-ch-ua-mobile": "?0",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 Edg/127.0.0.0"
     }
-    download_images(jietu_url, jietu_folder_name, jietu_headers, cookies={})
-    
+    download_images(jietu_url, jietu_folder_name, jietu_headers, cookies={})'''
     num = 2
     for i in range(1, 10):
         # 下载更多海报
@@ -105,12 +104,12 @@ def main():
         download_images2(haibao_url, haibao_folder_name, headerstongyong, cookies={})
         num += 1
 
-    num = 2
+    '''num = 2
     for i in range(1, 14):
         # 下载更多截图
         jietu_url = f"https://www.yjwujian.cn/inline/20v1/printscreen/pic_index_{num}.html"
         download_images2(jietu_url, jietu_folder_name, headerstongyong, cookies={})
-        num += 1
+        num += 1'''
     
     new_final_list = [ url for url in final_list if len(str(url))>=83 ]
     print("本次爬取到url数量如下:",len(new_final_list))
