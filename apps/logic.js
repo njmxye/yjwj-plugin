@@ -1,20 +1,17 @@
 import plugin from '../../../lib/plugins/plugin.js'
+import '../../../lib/plugins/loader.js'
 import{ execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path'
 import fetch from 'node-fetch'
 import os from 'os'
 // 检查是否有data/ys-dio-pic文件夹，没有则创建
-
+let queueDict = {};
 let imgfol = './data/yjwjimg'
 let queue1 = './plugins/yjwj-plugin/sundry/queue1.json'
-let queue2 = './plugins/yjwj-plugin/sundry/queue2.json'
-let queue3 = './plugins/yjwj-plugin/sundry/queue3.json'
-let queue4 = './plugins/yjwj-plugin/sundry/queue4.json'
-let singleRow = [];
-let doubleRow = [];
-let tripleRow = [];
-let quadrupleRow = [];
+if (!fs.existsSync(queue1)) {
+    fs.closeSync(fs.openSync(queue1, 'w'));
+  }
 let memeDir = './plugins/yjwj-plugin/sundry/meme'
 if (!fs.existsSync(imgfol)) {
   fs.mkdirSync(imgfol)
@@ -33,6 +30,10 @@ export class setting extends plugin {
                     permission: 'master'
                 },
                 {
+                    reg: '^今日早报.*$',
+                    fnc: 'news'
+                },
+                {
                     reg: '^海报.*$',
                     fnc: 'imgmanual'
                 },       
@@ -49,7 +50,7 @@ export class setting extends plugin {
                     fnc: 'meme'
                 },
                 {
-                    reg: '^#(单排|双排|三排|四排).*$',
+                    reg: '^#预约.*$',
                     fnc:'queue'
                 },
                 {
@@ -57,7 +58,7 @@ export class setting extends plugin {
                     fnc: 'queueout'
                 },
                 {
-                    reg: '^#排队列表$',
+                    reg: '^#预约列表$',
                     fnc: 'queuelist_total'
                 },
                 {
@@ -105,103 +106,64 @@ export class setting extends plugin {
     }
 
 
-    async queue(e) {
-        try {
-            queuelist_total(e)
-
-            let reg = new RegExp('^#(单排|双排|三排).*$')
-            let regRet = reg.exec(e.msg)
-            // 发送正在写入数据库的消息
-            e.reply('正在写入数据库……');
-            user_idadd = e.at;
-            let a = 'http://q2.qlogo.cn/headimg_dl?dst_uin=' + user_idadd + '&spec=5';
-            if (!regRet) return false;
-            switch (regRet[1]) {
-                case '单排':
-                    singleRow.push({ user_idadd });
-                    fs.writeFileSync(queue1, JSON.stringify(singleRow));
-                    break;
-                case '双排':
-                    doubleRow.push({ user_idadd });
-                    fs.writeFileSync(queue2, JSON.stringify(doubleRow));
-                    break;
-                case '三排':
-                    tripleRow.push({ user_idadd });
-                    fs.writeFileSync(queue3, JSON.stringify(tripleRow));
-                    break;
-                case '四排':
-                    quadrupleRow.push({ user_idadd });
-                    fs.writeFileSync(queue4, JSON.stringify(quadrupleRow));
-                    break;
-            }
-
-            // 构建祝贺消息
-            let msg = ['排队成功，他想打劫了，当前排队人数请看#排队列表……', segment.image(a), e.nickname, '(' + String(user_idadd) + ')' + '已计入' + regRet[1] + '队列'];
-
-            // 发送排队成功的消息
-            e.reply('排队成功');
-            e.reply(msg);
-
-        } catch (error) {
-            throw new Error('获取成员信息失败或者在构建排队信息时出错');
+    async queue(e) {   
+        let a = 'http://q2.qlogo.cn/headimg_dl?dst_uin=' + e.user_id + '&spec=5';
+        let queueData = {
+                user_id: e.user_id
+        };
+        let existingQueueData = [];
+        if (fs.existsSync(queue1)) {
+            existingQueueData = JSON.parse(fs.readFileSync(queue1));
         }
+        existingQueueData.push(queueData);
+        fs.writeFileSync(queue1, JSON.stringify(existingQueueData));
+
+        let msg = ['预约成功！\n他想打劫了，当前预约人数请发送\n#预约列表', segment.image(a),segment.at(e.user_id)];
+        e.reply(msg);
+        this.queuelist_total(e)
     }
+
+
+
 
     async queuelist_total(e) {
-
-        fs.readFile(queue1, 'utf8', (err, data) => {
-        if (err) {
-            console.error(err);
-            return;
-        }
-        singleRow = JSON.parse(data);
-        });
-
-        fs.readFile(queue2, 'utf8', (err, data) => {
-        if (err) {
-            console.error(err);
-            return;
-        }
-        doubleRow = JSON.parse(data);
-        });
-
-        fs.readFile(queue3, 'utf8', (err, data) => {
-        if (err) {
-            console.error(err);
-            return;
-        }
-        tripleRow = JSON.parse(data);
-        });
-
-        fs.readFile(queue4, 'utf8', (err, data) => {
-        if (err) {
-            console.error(err);
-            return;
-        }
-        quadrupleRow = JSON.parse(data);
-        });
-        if (singleRow == null) {
-                singleRow = [];
+        try {
+            if (fs.existsSync(queue1)) {
+                let queueData = await fs.promises.readFile(queue1, 'utf8');
+                queueData = JSON.parse(queueData);
+                let queueCount = {};
+                queueData.forEach((entry) => {
+                    if (!queueCount[entry.rank_type]) {
+                        queueCount[entry.rank_type] = 1;
+                    } else {
+                        queueCount[entry.rank_type]++;
+                    }
+                });
+                let reply = "当前排队人数：\n";
+                Object.keys(queueCount).forEach((rankType) => {
+                    reply += `${rankType}：${queueCount[rankType]}人\n`;
+                });
+                reply += "详细列表：\n";
+                queueData.forEach((entry) => {
+                    reply += `${entry.nickname}（${entry.user_idadd}）- ${entry.rank_type}\n`;
+                });
+                e.reply(reply);
+            } else {
+                e.reply("排队列表为空");
             }
-        if (doubleRow == null) {
-                doubleRow = [];
-            }
-        if (tripleRow == null) {
-                tripleRow = [];
-            }
-        if (quadrupleRow == null) {
-                quadrupleRow = [];
-            }
-        // 打印数组长度和内容示例
+        } catch (error) {
+            console.error(error);
+            e.reply("发生错误，请稍后再试");
+        }
+    }
 
 
-        e.reply('当前排队人数：\n' + '单排：' + singleRow.length + '人\n' + '双排：' + doubleRow.length + '人\n' + '三排：' + tripleRow.length + '人'+'\n'+'四排：' + quadrupleRow.length + '人');
-        e.reply('单排：' + singleRow.toString());
-        e.reply('双排：' + doubleRow.toString());
-        e.reply('三排：' + tripleRow.toString());
-        e.reply('四排：' + quadrupleRow.toString());
+    async news(e) {
+
 
     }
+
+
 
     async queueout(e) {
         e.reply('功能没写完，去催楠寻赶紧写！')
@@ -282,15 +244,15 @@ export class setting extends plugin {
     async help(e) {
         await e.reply([
             '帮助：\n',
-            '1. 输入#永劫无间全部图源\n  可以获取全部图源\n',
-            '2. 输入海报\n  可以获取随机海报大图\n',
-            '3. 输入表情包\n  可以获取随机表情包\n',
-            '4. 输入永劫更新数据\n  可以更新图源\n',
-            '5. 输入永劫帮助\n  可以查看帮助信息\n',
-            '6. 输入#(单排|双排|三排|四排)\n  可以排队\n',
-            '7. 输入#排队列表\n  可以查看排队列表\n',
-            '8. 输入#取消\n  可以取消排队\n',
-            '9. 输入#yj更新\n  可以更新永劫插件\n',
+            '1. 输入#永劫无间全部图源\n可以获取全部图源\n',
+            '2. 输入海报\n可以获取随机海报大图\n',
+            '3. 输入表情包\n可以获取随机表情包\n',
+            '4. 输入永劫更新数据\n可以更新图源\n',
+            '5. 输入永劫帮助\n可以查看帮助信息\n',
+            '6. 输入#预约\n可以预约和群友打劫！\n',
+            '7. 输入#预约列表\n可以查看排队列表\n',
+            '8. 输入#取消\n可以取消排队\n',
+            '9. 输入#yj更新\n可以更新永劫插件\n',
             '我身无拘  武道无穷\n'
         ])
         return true
@@ -299,7 +261,7 @@ export class setting extends plugin {
         await e.reply('正在更新配置文件……')
         try {
             // 使用 execSync 确保命令执行完再继续后面的步骤。
-            let output1 = execSync('python ./plugins/yjwj-plugin/apps/imgv1.2.py');
+            let output1 = execSync('python./plugins/yjwj-plugin/apps/imgv1.2.py');
             let output2 = execSync('ls');
             e.reply("图源更新成功");
         } catch (err) {
@@ -309,7 +271,6 @@ export class setting extends plugin {
             e.reply(err.toString());
         }
     }
-
-
     
 }
+
