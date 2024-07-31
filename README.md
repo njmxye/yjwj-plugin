@@ -42,7 +42,7 @@ cd Miao-Yunzai/plugins
 ```
 **克隆本仓库 📦**:
 ```bash
-git clone https://github.com/njmxye/Xx-Player.git
+git clone https://github.com/njmxye/yjwj-plugin.git
 ```  
 ### 👏 **贡献者邀请**
 
