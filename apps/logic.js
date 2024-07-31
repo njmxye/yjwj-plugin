@@ -108,6 +108,7 @@ export class setting extends plugin {
     async queue(e) {
         try {
             queuelist_total(e)
+
             let reg = new RegExp('^#(单排|双排|三排).*$')
             let regRet = reg.exec(e.msg)
             // 发送正在写入数据库的消息
@@ -179,7 +180,18 @@ export class setting extends plugin {
         }
         quadrupleRow = JSON.parse(data);
         });
-
+        if (singleRow == null) {
+                singleRow = [];
+            }
+        if (doubleRow == null) {
+                doubleRow = [];
+            }
+        if (tripleRow == null) {
+                tripleRow = [];
+            }
+        if (quadrupleRow == null) {
+                quadrupleRow = [];
+            }
         // 打印数组长度和内容示例
 
 
@@ -228,8 +240,8 @@ export class setting extends plugin {
             if (!response.ok) {
               throw new Error(`下载失败，状态码: ${response.status}`);
             }
-            const buffer = await response.buffer();
-            fs.writeFileSync(downloadPath, buffer);
+            const buffer = await response.arrayBuffer();
+            fs.writeFileSync(downloadPath, Buffer.from(buffer));
             console.log(`图片成功下载到: ${downloadPath}`);
           } catch (error) {
             console.error('下载出错:', error);
