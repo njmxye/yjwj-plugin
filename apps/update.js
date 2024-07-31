@@ -20,8 +20,9 @@ export class update extends plugin {
       priority: 1009,
       rule: [
         {
-          reg: '^#?yjwj更新$',
-          fnc: 'update'
+          reg: '^#?yj更新$',
+          fnc: 'update',
+          permission:'master'
         }
       ]
     })
