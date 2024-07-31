@@ -7,7 +7,14 @@ import os from 'os'
 // 检查是否有data/ys-dio-pic文件夹，没有则创建
 
 let imgfol = './data/yjwjimg'
-let queue = './plugins/yjwj-plugin/sundry/queue.json'
+let queue1 = './plugins/yjwj-plugin/sundry/queue1.json'
+let queue2 = './plugins/yjwj-plugin/sundry/queue2.json'
+let queue3 = './plugins/yjwj-plugin/sundry/queue3.json'
+let queue4 = './plugins/yjwj-plugin/sundry/queue4.json'
+let singleRow = [];
+let doubleRow = [];
+let tripleRow = [];
+let quadrupleRow = [];
 let memeDir = './plugins/yjwj-plugin/sundry/meme'
 if (!fs.existsSync(imgfol)) {
   fs.mkdirSync(imgfol)
@@ -26,7 +33,7 @@ export class setting extends plugin {
                     permission: 'master'
                 },
                 {
-                    reg: '^图.*$',
+                    reg: '^海报.*$',
                     fnc: 'imgmanual'
                 },       
                 {
@@ -38,11 +45,11 @@ export class setting extends plugin {
                     fnc: 'update_config'
                 },
                 {
-                    reg: '^表情$',
+                    reg: '^表情包$',
                     fnc: 'meme'
                 },
                 {
-                    reg: '^#排队$',
+                    reg: '^#(单排|双排|三排|四排).*$',
                     fnc:'queue'
                 },
                 {
@@ -97,12 +104,93 @@ export class setting extends plugin {
         })
     }
 
+
     async queue(e) {
-        e.reply('正在写入数据库……')
-        
-        e.reply('排队成功')
+        try {
+            queuelist_total(e)
+            let reg = new RegExp('^#(单排|双排|三排).*$')
+            let regRet = reg.exec(e.msg)
+            // 发送正在写入数据库的消息
+            e.reply('正在写入数据库……');
+            user_idadd = e.at;
+            let a = 'http://q2.qlogo.cn/headimg_dl?dst_uin=' + user_idadd + '&spec=5';
+            if (!regRet) return false;
+            switch (regRet[1]) {
+                case '单排':
+                    singleRow.push({ user_idadd });
+                    fs.writeFileSync(queue1, JSON.stringify(singleRow));
+                    break;
+                case '双排':
+                    doubleRow.push({ user_idadd });
+                    fs.writeFileSync(queue2, JSON.stringify(doubleRow));
+                    break;
+                case '三排':
+                    tripleRow.push({ user_idadd });
+                    fs.writeFileSync(queue3, JSON.stringify(tripleRow));
+                    break;
+                case '四排':
+                    quadrupleRow.push({ user_idadd });
+                    fs.writeFileSync(queue4, JSON.stringify(quadrupleRow));
+                    break;
+            }
+
+            // 构建祝贺消息
+            let msg = ['排队成功，他想打劫了，当前排队人数请看#排队列表……', segment.image(a), e.nickname, '(' + String(user_idadd) + ')' + '已计入' + regRet[1] + '队列'];
+
+            // 发送排队成功的消息
+            e.reply('排队成功');
+            e.reply(msg);
+
+        } catch (error) {
+            throw new Error('获取成员信息失败或者在构建排队信息时出错');
+        }
+    }
+
+    async queuelist_total(e) {
+
+        fs.readFile(queue1, 'utf8', (err, data) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+        singleRow = JSON.parse(data);
+        });
+
+        fs.readFile(queue2, 'utf8', (err, data) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+        doubleRow = JSON.parse(data);
+        });
+
+        fs.readFile(queue3, 'utf8', (err, data) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+        tripleRow = JSON.parse(data);
+        });
+
+        fs.readFile(queue4, 'utf8', (err, data) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+        quadrupleRow = JSON.parse(data);
+        });
+
+        // 打印数组长度和内容示例
+
+
+        e.reply('当前排队人数：\n' + '单排：' + singleRow.length + '人\n' + '双排：' + doubleRow.length + '人\n' + '三排：' + tripleRow.length + '人'+'\n'+'四排：' + quadrupleRow.length + '人');
+        e.reply('单排：' + singleRow.toString());
+        e.reply('双排：' + doubleRow.toString());
+        e.reply('三排：' + tripleRow.toString());
+        e.reply('四排：' + quadrupleRow.toString());
 
     }
+
     async queueout(e) {
         e.reply('功能没写完')
     }
@@ -181,10 +269,12 @@ export class setting extends plugin {
     async help(e) {
         await e.reply([
             '帮助：\n',
-            '1. 输入#永劫无间全部图源\n可以获取全部图源（仅主人可用）\n',
-            '2. 输入图\n可以获取随机图源\n',
-            '3. 输入永劫更新数据\n可以更新图源\n',
-            '4. 输入永劫无间帮助\n可以查看帮助信息\n',
+            '1. 输入#永劫无间全部图源\n  可以获取全部图源\n',
+            '2. 输入图\n  可以获取随机图源\n',
+            '3. 输入永劫更新数据\n  可以更新图源\n',
+            '4. 输入永劫无间帮助\n  可以查看帮助信息\n',
+            '5. 输入#(单排|双排|三排|四排)\n  可以排队\n',
+            '6. 输入#排队列表\n  可以查看排队列表\n',
             '我身无拘  武道无穷\n'
         ])
         return true
