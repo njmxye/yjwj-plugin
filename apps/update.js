@@ -73,8 +73,7 @@ export class update extends plugin {
     } else {
       this.e.reply('正在执行更新操作，你等一会儿嗷')
     }
-
-    
+    /** 获取上次提交的commitId，用于获取日志时判断新增的更新日志 */
     this.oldCommitId = await this.getcommitId('yjwj-plugin')
     uping = true
     const ret = await this.execSync(command)

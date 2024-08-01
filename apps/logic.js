@@ -183,9 +183,17 @@ export class setting extends plugin {
 
 
 
-    async queueout(e) {
-        e.reply('功能没写完，去催楠寻赶紧写！')
-    }
+    async queueout(e) {   
+            let queueData = await fs.promises.readFile(queue1, 'utf8');
+            queueData = JSON.parse(queueData);
+            const user_id = e.user_id;
+            if (!queueData.find(item => item.user_id === user_id)) return e.reply('该用户没有在队列中，取消失败');
+            queueData = queueData.filter(item => item.user_id!== user_id);
+            fs.writeFileSync(queue1, JSON.stringify(queueData));
+            e.reply('取消成功！');
+            this.queuelist_total(e)
+        }
+
     async meme(e) {
         // 随机从表情包中选择一张图片发送
         let metu = fs.readdirSync(memeDir)
