@@ -34,6 +34,10 @@ export class setting extends plugin {
                     fnc: 'news'
                 },
                 {
+                    reg: '^#早报更新$',
+                    fnc: 'newsupdate'
+                },
+                {
                     reg: '^海报.*$',
                     fnc: 'imgmanual'
                 },       
@@ -177,9 +181,6 @@ export class setting extends plugin {
 
 
 
-    async news(e) {
-        e.reply('功能没写完，去催楠寻赶紧写！')
-    }
 
 
 
@@ -269,18 +270,20 @@ export class setting extends plugin {
     async help(e) {
         await e.reply([
             '帮助：\n',
-            '1. 输入#永劫无间全部图源\n可以获取全部图源\n',
-            '2. 输入海报\n可以获取随机海报大图\n',
-            '3. 输入表情包\n可以获取随机表情包\n',
-            '4. 输入永劫更新数据\n可以更新图源\n',
-            '5. 输入永劫帮助\n可以查看帮助信息\n',
-            '6. 输入#预约\n可以预约和群友打劫！\n',
-            '7. 输入#预约列表\n可以查看预约列表\n',
-            '8. 输入#取消\n可以取消排队\n',
-            '9. 输入#yj更新\n可以更新永劫插件\n',
-            '10. 输入#预约清空\n可以清空预约列表\n',
-            '11. 输入今日早报\n可以获取每天60秒新闻\n',
-            '我身无拘  武道无穷\n'
+            '1. 输入#永劫无间全部图源\n获取全部图源\n',
+            '2. 输入海报\n获取随机海报大图\n',
+            '3. 输入表情包\n获取随机表情包\n',
+            '4. 输入永劫更新数据\n更新图源\n',
+            '5. 输入永劫帮助\n查看帮助信息\n',
+            '6. 输入#预约\n预约和群友打劫！\n',
+            '7. 输入#预约列表\n查看预约列表\n',
+            '8. 输入#取消\n取消排队\n',
+            '9. 输入#yj更新\n更新永劫插件\n',
+            '10. 输入#预约清空\n清空预约列表\n',
+            '11. 输入今日早报\n获取每天60秒新闻\n',
+            '12. 输入#早报更新\n更新新闻文件\n',
+            '我身无拘  武道无穷！\n',
+            '咱们群里上过修罗的，记得和群主要修罗头衔！'
         ])
         return true
     }
@@ -288,8 +291,7 @@ export class setting extends plugin {
         await e.reply('正在更新配置文件……')
         try {
             // 使用 execSync 确保命令执行完再继续后面的步骤。
-            let output1 = execSync('python./plugins/yjwj-plugin/apps/imgv1.2.py');
-            let output2 = execSync('ls');
+            let output1 = execSync('python ./plugins/yjwj-plugin/apps/imgv1.2.py');
             e.reply("图源更新成功");
         } catch (err) {
             console.error("图源更新出错：", err);
@@ -298,6 +300,42 @@ export class setting extends plugin {
             e.reply(err.toString());
         }
     }
-    
+    async newsupdate(e) {
+        await e.reply('正在更新新闻文件……')
+        try {
+            // 使用 execSync 确保命令执行完再继续后面的步骤。
+            let output1 = execSync('python ./plugins/yjwj-plugin/apps/news.py');
+            e.reply("新闻更新成功");
+        } catch (err) {
+            console.error("新闻更新出错：", err);
+            e.reply("新闻更新出错");
+            // 如果需要，你可以选择在这里输出错误信息
+            e.reply(err.toString());
+        }
+    }
+
+    async news(e) {
+        if (fs.existsSync('news.json')) {  
+            this.newsupdate(e)
+            try {
+                const fileContent = fs.readFileSync('news.json', 'utf8');
+                console.log('数据获取成功');
+                const jsonData = JSON.parse(fileContent);
+                jsonData.forEach(item => {
+                    if (item!== "") {
+                        e.reply(item);
+                    }
+                });
+            } catch (err) {
+                console.error("读取文件内出错：", err);
+                e.reply('数据读取失败，请检查配置文件');
+                e.reply(err.toString());
+            }
+        } else {
+            await e.reply('数据获取失败，请使用[#早报更新]更新配置文件');
+        }
+    } 
+
 }
+
 
