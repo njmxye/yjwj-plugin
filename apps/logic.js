@@ -30,7 +30,7 @@ export class setting extends plugin {
                     permission: 'master'
                 },
                 {
-                    reg: '^今日早报.*$',
+                    reg: '^今日早报$',
                     fnc: 'news'
                 },
                 {
@@ -50,12 +50,17 @@ export class setting extends plugin {
                     fnc: 'meme'
                 },
                 {
-                    reg: '^#预约.*$',
+                    reg: '^#预约$',
                     fnc:'queue'
                 },
                 {
                     reg: '^#取消$',
                     fnc: 'queueout'
+                },
+                {
+                    reg: '^#预约清空$',
+                    fnc: 'queuelist_refresh',
+                    permission:'master'
                 },
                 {
                     reg: '^#预约列表$',
@@ -109,64 +114,76 @@ export class setting extends plugin {
     async queue(e) {   
         let a = 'http://q2.qlogo.cn/headimg_dl?dst_uin=' + e.user_id + '&spec=5';
         let queueData = {
-                user_id: e.user_id
+            user_id: e.user_id
         };
         let existingQueueData = [];
         if (fs.existsSync(queue1)) {
             existingQueueData = JSON.parse(fs.readFileSync(queue1));
         }
-        existingQueueData.push(queueData);
-        fs.writeFileSync(queue1, JSON.stringify(existingQueueData));
+
+        let userExists = existingQueueData.some(entry => entry.user_id === queueData.user_id);
+        if (!userExists) {
+            existingQueueData.push(queueData);
+            fs.writeFileSync(queue1, JSON.stringify(existingQueueData));
+        } else {
+            e.reply('该用户已在队列中，请勿重复预约！');
+        }
 
         let msg = ['预约成功！\n他想打劫了，当前预约人数请发送\n#预约列表', segment.image(a),segment.at(e.user_id)];
         e.reply(msg);
         this.queuelist_total(e)
-    }
-
-
-
+        
+    }  
+    
 
     async queuelist_total(e) {
-        try {
-            if (fs.existsSync(queue1)) {
-                let queueData = await fs.promises.readFile(queue1, 'utf8');
-                queueData = JSON.parse(queueData);
-                let queueCount = {};
-                queueData.forEach((entry) => {
-                    if (!queueCount[entry.rank_type]) {
-                        queueCount[entry.rank_type] = 1;
-                    } else {
-                        queueCount[entry.rank_type]++;
-                    }
-                });
-                let reply = "当前排队人数：\n";
-                Object.keys(queueCount).forEach((rankType) => {
-                    reply += `${rankType}：${queueCount[rankType]}人\n`;
-                });
-                reply += "详细列表：\n";
-                queueData.forEach((entry) => {
-                    reply += `${entry.nickname}（${entry.user_idadd}）- ${entry.rank_type}\n`;
-                });
-                e.reply(reply);
-            } else {
-                e.reply("排队列表为空");
-            }
-        } catch (error) {
-            console.error(error);
-            e.reply("发生错误，请稍后再试");
+    try {
+        // 读取固定的 JSON 文件
+        let queueData = await fs.promises.readFile(queue1, 'utf8');
+        queueData = JSON.parse(queueData);
+
+        let queueCount = {};
+        queueData.forEach((entry) => {
+        if (!queueCount[entry.user_id]) {
+            queueCount[entry.user_id] = 1;
+        } else {
+            queueCount[entry.user_id]++;
         }
+        });
+
+        let reply = "当前排队人数：\n";
+        let totalCount = 0;
+        Object.keys(queueCount).forEach((user_id) => {
+        totalCount += queueCount[user_id];
+        });
+        reply += `总人数：${totalCount}人\n`;
+
+        reply += "详细列表：\n";
+        queueData.forEach((entry) => {
+        reply += `${entry.user_id}\n`;
+        });
+
+        e.reply(reply);
+    } catch (error) {
+        console.error(error);
+        e.reply("发生错误，请稍后再试");
     }
+    }
+
+    async queuelist_refresh(e) {
+        fs.writeFileSync(queue1, JSON.stringify([]));
+        e.reply('预约列表已清空！')
+    }
+
 
 
     async news(e) {
-
-
+        e.reply('功能没写完，去催楠寻赶紧写！')
     }
 
 
 
     async queueout(e) {
-        e.reply('功能没写完，去催楠寻赶紧写！')
         e.reply('功能没写完，去催楠寻赶紧写！')
     }
     async meme(e) {
@@ -215,7 +232,7 @@ export class setting extends plugin {
         } catch (err) {
         }
     } else {
-        await e.reply('数据获取失败，请使用[#劫更新数据]更新配置文件'); 
+        await e.reply('数据获取失败，请使用[永劫更新数据]更新配置文件'); 
     }
     }
 
@@ -236,7 +253,7 @@ export class setting extends plugin {
             await e.reply('数据读取失败，请检查配置文件');
         }
         } else {
-            await e.reply('数据获取失败，请使用[#劫更新数据]更新配置文件'); 
+            await e.reply('数据获取失败，请使用[永劫更新数据]更新配置文件'); 
         }
     }
 
@@ -250,9 +267,11 @@ export class setting extends plugin {
             '4. 输入永劫更新数据\n可以更新图源\n',
             '5. 输入永劫帮助\n可以查看帮助信息\n',
             '6. 输入#预约\n可以预约和群友打劫！\n',
-            '7. 输入#预约列表\n可以查看排队列表\n',
+            '7. 输入#预约列表\n可以查看预约列表\n',
             '8. 输入#取消\n可以取消排队\n',
             '9. 输入#yj更新\n可以更新永劫插件\n',
+            '10. 输入#预约清空\n可以清空预约列表\n',
+            '11. 输入今日早报\n可以获取每天60秒新闻\n',
             '我身无拘  武道无穷\n'
         ])
         return true

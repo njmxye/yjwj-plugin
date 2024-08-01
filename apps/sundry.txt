@@ -39,3 +39,8 @@ async update_config(e) {
                     reg: '^#劫更新数据.*$',
                     fnc: 'update_config'
                 }
+
+            let reply = "当前排队人数：\n";
+            Object.keys(queueCount).forEach((user_id) => {
+                reply += `${user_id}：${queueCount[user_id]}人\n`;
+            });
