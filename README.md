@@ -1,10 +1,10 @@
-🌌 **永劫无间插件 —— yjwj-Plugin 🌠**
+# 🌌 永劫无间插件 —— yjwj-Plugin 🌠
 
-🎉 **欢迎来到永劫无间插件的世界，这里充满了无限可能与惊喜！**
+### 🎉 欢迎来到永劫无间插件的世界，这里充满了无限可能与惊喜！
 
-🚀 **探索永劫无间，让 yjwj-Plugin 成为你的冒险伙伴！**
+### 🚀 探索永劫无间，让 yjwj-Plugin 成为你的冒险伙伴！
 
-### 🎨 **功能特色**
+## 🎨 功能特色
 
 ## （很遗憾的是，笔者需要上学背八股【高考】，整个插件的大项目会咕咕一段时间【可能是一坤年？】。但是能承诺的是，笔者再回来会更新一个不输修仙游戏的Galgame文游系统，会接入kimi做高度自由的开放世界！）
 ## 
@@ -40,13 +40,13 @@
 10. **ai大模型 —— 接入kimi智能体** 🤖
   - 智能对话，直接享受最新科技成果！
 
-### 🛠️ **技术亮点**
+## 🛠️ 技术亮点
 
 - **AI智能推荐**：采用先进的人工智能算法，为你推荐最感兴趣的内容。
 - **跨平台支持**：完美适配PC和移动设备，无论何时何地都能享受服务。
 - **社区互动增强**：通过插件加强玩家间的交流，打造更加紧密的游戏社区。
 
-### 🌈 **快速入门**
+## 🌈 快速入门
 
 **安装Python环境**: 不用我教吧。
 **选择Yunzai 插件目录 📁**: 
@@ -75,22 +75,22 @@ pip install -r requirements.txt
 
 ## 注意⚠️
 - 请确保你的 Python 环境已经安装并配置正确。
-- 时雨星空的脚本tsab版崽子如果环境用的arch linux，需要自行配置虚拟python环境，并在tsab前actived你的虚拟python环境！**切记！**
-- 时雨星空的脚本tsab版崽子如果环境用的arch linux，需要自行配置虚拟python环境，并在tsab前actived你的虚拟python环境！**切记！**
-- 时雨星空的脚本tsab版崽子如果环境用的arch linux，需要自行配置虚拟python环境，并在tsab前actived你的虚拟python环境！**切记！**
+- **切记！**  时雨星空trss.me的脚本tsab版崽子如果环境用的arch linux，需要自行配置虚拟python环境，并在tsab前actived你的虚拟python环境！
+- **切记！**  时雨星空trss.me的脚本tsab版崽子如果环境用的arch linux，需要自行配置虚拟python环境，并在tsab前actived你的虚拟python环境！
+- **切记！**  时雨星空trss.me的脚本tsab版崽子如果环境用的arch linux，需要自行配置虚拟python环境，并在tsab前actived你的虚拟python环境！
 - 如果pip install速度慢或报错，请自行更换清华大学镜像源！
 
-### 👏 **贡献者邀请**
+### 👏 贡献者邀请
 
 - 如果你有创意或发现问题，欢迎提交 issue 或 pull request，一起让 yjwj-Plugin 更加完善！
 
-### 📌 **未来展望**
+### 📌 未来展望
 
 - **更多英雄故事** 🦸‍♂️：不断增加新英雄的详细介绍和语音，丰富你的英雄档案馆。
 - **社区活动集成** 🎉：加入更多社区活动功能，提升玩家的参与度和归属感。
 - **个性化推荐系统** 🤖：根据你的喜好，提供更加精准的个性化内容推荐。
 
-### 🎉 **加入我们**
+### 🎉 加入我们
 
 - **准备好了吗？** 让我们一起在永劫无间中探索未知，yjwj-Plugin 将是你最佳的伙伴！
 
@@ -101,6 +101,7 @@ pip install -r requirements.txt
 ### 📜 **联系我们**
 
 - **我的博客**：[楠寻的小窝](https://njmxye.github.io/)
+- **github仓库**：[永劫无间插件](https://github.com/njmxye/yjwj-plugin)
 - **官方论坛**：[永劫无间官方论坛](https://mbox.gm.163.com/games/faq.html?paper_id=4557)
 - **客服支持**：[联系客服](https://help.steampowered.com/zh-cn/wizard/HelpWithGame/?appid=1203220&transid=5975764013445813478)
 - **社交媒体**：[永劫无间社交媒体](https://www.yjwujian.cn/)
