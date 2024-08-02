@@ -65,6 +65,10 @@ cd sundry
 cd intelligence
 pip install -r requirements.txt
 ```
+**配置插件 ⚙️**:
+编辑 yjwj-plugin/sundry/intelligence/config.json 文件，配置你的插件参数。
+格式为{"token": "12345678", "auth_token": "Bearer ", "refresh_token": "Bearer "}
+修改后两项为Bearer空格后填你的kimitoken，具体token获取方法见kimi官网或者百度！
 **启动插件 🚀**:
 输入“永劫帮助”，查看插件的功能。
 ### 👏 **贡献者邀请**
