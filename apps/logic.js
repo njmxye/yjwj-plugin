@@ -7,6 +7,7 @@ import fetch from 'node-fetch'
 import os from 'os'
 // 检查是否有data/ys-dio-pic文件夹，没有则创建
 let queueDict = {};
+let prom = 'kimi'
 let imgfol = './data/yjwjimg'
 let queue1 = './plugins/yjwj-plugin/sundry/queue1.json'
 if (!fs.existsSync(queue1)) {
@@ -48,6 +49,14 @@ export class setting extends plugin {
                 {
                     reg: '^永劫更新数据.*$',
                     fnc: 'update_config'
+                },
+                {
+                    reg: '^开启km$',
+                    fnc: 'kimiopen'
+                },
+                {
+                    reg: `^${bot}`,
+                    fnc: 'kimi'
                 },
                 {
                     reg: '^表情包$',
@@ -112,6 +121,19 @@ export class setting extends plugin {
                 }
             ]
         })
+    }
+
+    async kimiopen(e) {
+        e.reply('正在开启智能助手！')
+        execSync('python ./plugins/yjwj-plugin/sundry/intelligence/diaoyong.py');
+        e.reply('开启成功！你现在可以用kimi开头的指令来和智能助手对话！')
+    }
+    async kimi(e) {
+        let msg = _.trimStart(e.msg, prom);
+        fs.writeFileSync('./plugins/yjwj-plugin/sundry/intelligence/question.json', JSON.stringify(msg), 'utf8');
+        execSync('python ./plugins/yjwj-plugin/sundry/intelligence/diaoyong2.py');
+        e.reply('如果调用失败，请检查插件sundry/intelligence/config.json文件是否正确配置，正确配置应该在Bearer空格后面填写你的kimiToken！！！')
+
     }
 
 
@@ -282,6 +304,8 @@ export class setting extends plugin {
             '10. 输入#预约清空\n清空预约列表\n',
             '11. 输入今日早报\n获取每天60秒新闻\n',
             '12. 输入#早报更新\n更新新闻文件\n',
+            '13. 输入开启km\n查看排行榜\n',
+            '14. 输入kimi……（省略的是你要提的问题，记住问中文问题会乱码，以后会解决！）\n和kimi进行对话\n',
             '我身无拘  武道无穷！\n',
             '咱们群里上过修罗的，记得和群主要修罗头衔！',
             '楠寻永劫无间的小群：966160338'
@@ -293,7 +317,7 @@ export class setting extends plugin {
         await e.reply('正在更新配置文件……')
         try {
             // 使用 execSync 确保命令执行完再继续后面的步骤。
-            let output1 = execSync('python ./plugins/yjwj-plugin/apps/imgv1.2.py');
+            execSync('python ./plugins/yjwj-plugin/apps/imgv1.2.py');
             e.reply("图源更新成功");
         } catch (err) {
             console.error("图源更新出错：", err);
@@ -306,7 +330,7 @@ export class setting extends plugin {
         await e.reply('正在更新新闻文件……')
         try {
             // 使用 execSync 确保命令执行完再继续后面的步骤。
-            let output1 = execSync('python ./plugins/yjwj-plugin/apps/news.py');
+            execSync('python ./plugins/yjwj-plugin/apps/news.py');
             e.reply("新闻更新成功");
         } catch (err) {
             console.error("新闻更新出错：", err);
