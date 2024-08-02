@@ -109,7 +109,8 @@ pip install -r requirements.txt
 ### 📜 **联系我们**
 
 - **我的博客**：[楠寻的小窝](https://njmxye.github.io/)
-- **官方QQ群**：[永劫无间萌新交流群](https://qm.qq.com/cgi-bin/qm/qr?k=n_QYIPhlqu8n2U4i-Sp9YgF8i0TzqFAJ&jump_from=webapi&authKey=c4Lb1WlIGz6H1GKQpjEcrbcXYZR7IQQRmoRl9GallaCVrWySQGSY09gzwHmY/ZLP)<a target="_blank" href="https://qm.qq.com/cgi-bin/qm/qr?k=n_QYIPhlqu8n2U4i-Sp9YgF8i0TzqFAJ&jump_from=webapi&authKey=c4Lb1WlIGz6H1GKQpjEcrbcXYZR7IQQRmoRl9GallaCVrWySQGSY09gzwHmY/ZLP"><img border="0" src="//pub.idqqimg.com/wpa/images/group.png" alt="永劫无间萌新交流群" title="永劫无间萌新交流群"></a>
+- **官方QQ群**：[永劫无间萌新交流群](https://qm.qq.com/cgi-bin/qm/qr?k=n_QYIPhlqu8n2U4i-Sp9YgF8i0TzqFAJ&jump_from=webapi&authKey=c4Lb1WlIGz6H1GKQpjEcrbcXYZR7IQQRmoRl9GallaCVrWySQGSY09gzwHmY/ZLP)
+<a target="_blank" href="https://qm.qq.com/cgi-bin/qm/qr?k=n_QYIPhlqu8n2U4i-Sp9YgF8i0TzqFAJ&jump_from=webapi&authKey=c4Lb1WlIGz6H1GKQpjEcrbcXYZR7IQQRmoRl9GallaCVrWySQGSY09gzwHmY/ZLP"><img border="0" src="//pub.idqqimg.com/wpa/images/group.png" alt="永劫无间萌新交流群" title="永劫无间萌新交流群"></a>
 - **github仓库**：[永劫无间插件](https://github.com/njmxye/yjwj-plugin)
 - **官方论坛**：[永劫无间官方论坛](https://mbox.gm.163.com/games/faq.html?paper_id=4557)
 - **客服支持**：[联系客服](https://help.steampowered.com/zh-cn/wizard/HelpWithGame/?appid=1203220&transid=5975764013445813478)
