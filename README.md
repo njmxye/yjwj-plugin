@@ -7,7 +7,7 @@
 ## 🎨 功能特色
 
 ## （很遗憾的是，笔者需要上学背八股【高考】，整个插件的大项目会咕咕一段时间【可能是一坤年？】。但是能承诺的是，笔者再回来会更新一个不输修仙游戏的Galgame文游系统，会接入kimi做高度自由的开放世界！）
-## 
+# 装之前一定要看注意事项和现有BUG标注！！！
 
 1. **美图画廊 —— 随机美图展示** 🖼️
    - 永劫无间官方影画廊图库！
@@ -80,9 +80,17 @@ pip install -r requirements.txt
 - **切记！**  时雨星空trss.me的脚本tsab版崽子如果环境用的arch linux，需要自行配置虚拟python环境，并在tsab前actived你的虚拟python环境！
 - 如果pip install速度慢或报错，请自行更换清华大学镜像源！
 
+- **切记！**  有能力者欢迎来改bug！
+# 现有BUG！
+- **bug1！**  现在先不要用kimi相关功能，因为作者刚写完！有bug,具体愿意是作者写了kimiapi的py文件，挂在后台无法结束，结果是会导致云崽无法继续运行，只能重启！没有时间填坑，所以在bug修复前请不要使用kimi相关功能！
+- **bug2！**  每日新闻早报的数据源是每天9点多一点更新，所以在每天的0点至9点获取新闻早报会显示页面已丢失！作者还没写每日时间戳判断9点以前用昨天的数据，所以请算好时间，或者等待有能力的开发者或者作者的修复！
+- **bug3（算不上大bug）！**  永劫影画廊的爬虫逻辑没有考虑到js动态加载和缩略图的事情，导致现在获取的图源是缩略图，部分画质很差，一半的海报还是比较清晰。如果介意，请来帮助修复爬虫逻辑或者等待有能力的开发者和作者的修复！
+
 ### 👏 贡献者邀请
 
 - 如果你有创意或发现问题，欢迎提交 issue 或 pull request，一起让 yjwj-Plugin 更加完善！
+- 如果你有能力开发或者热爱永劫无间相关事宜，欢迎提供开发帮助与修复bug！（作者qq群966160338，入群答案填好就可以。）
+- 如果你喜欢 yjwj-Plugin，请给个 star，让我们一起分享和进步！
 
 ### 📌 未来展望
 
@@ -101,6 +109,7 @@ pip install -r requirements.txt
 ### 📜 **联系我们**
 
 - **我的博客**：[楠寻的小窝](https://njmxye.github.io/)
+- **官方QQ群**：[永劫无间萌新交流群](https://qm.qq.com/cgi-bin/qm/qr?k=n_QYIPhlqu8n2U4i-Sp9YgF8i0TzqFAJ&jump_from=webapi&authKey=c4Lb1WlIGz6H1GKQpjEcrbcXYZR7IQQRmoRl9GallaCVrWySQGSY09gzwHmY/ZLP)<a target="_blank" href="https://qm.qq.com/cgi-bin/qm/qr?k=n_QYIPhlqu8n2U4i-Sp9YgF8i0TzqFAJ&jump_from=webapi&authKey=c4Lb1WlIGz6H1GKQpjEcrbcXYZR7IQQRmoRl9GallaCVrWySQGSY09gzwHmY/ZLP"><img border="0" src="//pub.idqqimg.com/wpa/images/group.png" alt="永劫无间萌新交流群" title="永劫无间萌新交流群"></a>
 - **github仓库**：[永劫无间插件](https://github.com/njmxye/yjwj-plugin)
 - **官方论坛**：[永劫无间官方论坛](https://mbox.gm.163.com/games/faq.html?paper_id=4557)
 - **客服支持**：[联系客服](https://help.steampowered.com/zh-cn/wizard/HelpWithGame/?appid=1203220&transid=5975764013445813478)
