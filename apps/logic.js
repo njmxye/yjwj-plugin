@@ -5,6 +5,7 @@ import fs from 'fs';
 import path from 'path'
 import fetch from 'node-fetch'
 import os from 'os'
+let bot='kimi'
 // 检查是否有data/ys-dio-pic文件夹，没有则创建
 let queueDict = {};
 let prom = 'kimi'
