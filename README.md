@@ -15,7 +15,7 @@
 2. **英雄档案馆 —— 人物详情介绍** 📚
    - 世界观资料站与cv信息。
 
-3. **大神战绩榜 —— 战绩查询系统与全服排行榜** 🏹
+3. **网易大神战绩榜 —— 战绩查询系统与全服排行榜** 🏹
    - 实时更新顶尖玩家的战绩，让你随时学习他们的战斗策略。
    - 同步自己的战绩，魂玉伤害排名系统全追踪！
 
@@ -69,8 +69,17 @@ pip install -r requirements.txt
 编辑 yjwj-plugin/sundry/intelligence/config.json 文件，配置你的插件参数。
 格式为{"token": "12345678", "auth_token": "Bearer ", "refresh_token": "Bearer "}
 修改后两项为Bearer空格后填你的kimitoken，具体token获取方法见kimi官网或者百度！
+
 **启动插件 🚀**:
 输入“永劫帮助”，查看插件的功能。
+
+## 注意⚠️
+- 请确保你的 Python 环境已经安装并配置正确。
+- 时雨星空的脚本tsab版崽子如果环境用的arch linux，需要自行配置虚拟python环境，并在tsab前actived你的虚拟python环境！**切记！**
+- 时雨星空的脚本tsab版崽子如果环境用的arch linux，需要自行配置虚拟python环境，并在tsab前actived你的虚拟python环境！**切记！**
+- 时雨星空的脚本tsab版崽子如果环境用的arch linux，需要自行配置虚拟python环境，并在tsab前actived你的虚拟python环境！**切记！**
+- 如果pip install速度慢或报错，请自行更换清华大学镜像源！
+
 ### 👏 **贡献者邀请**
 
 - 如果你有创意或发现问题，欢迎提交 issue 或 pull request，一起让 yjwj-Plugin 更加完善！
