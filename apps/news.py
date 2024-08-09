@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import json
 import time
-from datetime import datetime
+from datetime import datetime,time
 def calculate_a_value(target_date):
     # 基准日期和基准值
     base_date = datetime(2024, 7, 31)
@@ -18,9 +18,21 @@ def calculate_a_value(target_date):
     a_value = base_value + days_difference
 
     return a_value
+now = datetime.now()
+nine_am = datetime.combine(now.date(), time(9, 0))
+bool = False
+if now > nine_am:
+    print('当前时间大于9点，正常获取今日新闻')
+    bool = True
+else:
+    print('当前时间小于9点，无法获取今日新闻')
+    bool = False
+
 
 current_date = time.strftime("%Y-%m-%d")
 a_value = calculate_a_value(current_date)
+if bool!=True:
+    a_value -= 1
 res = requests.get(f'https://www.qqorw.cn/mrzb/{a_value}.html')
 response = res.text
 soup = BeautifulSoup(response, 'html.parser')
