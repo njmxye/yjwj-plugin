@@ -6,7 +6,6 @@ import _ from 'lodash'
 import path from 'path'
 import fetch from 'node-fetch'
 import common from'../../../lib/common/common.js'
-import ffmpeg from 'fluent-ffmpeg';
 import os from 'os'
 // 检查是否有data/ys-dio-pic文件夹，没有则创建
 let queueDict = {};

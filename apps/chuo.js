@@ -17,9 +17,9 @@ export class chuo extends plugin{
     )
 }
 async chuoyichuo (e){
+    e.reply("戳你戳你戳你戳你戳你戳你戳你戳你戳你戳你戳你戳你戳你戳你戳你戳你戳你戳你戳你戳你戳你戳你戳你戳你戳你戳你戳你戳你戳你戳你戳你戳你戳你戳你戳你戳你戳你戳你戳你戳你戳你戳你戳你戳你戳你戳你戳")
     if(e.target_id == cfg.qq){
-        e.reply('你戳啥呢？我可是很记仇的！')
-        for (let i = 0; i < 16; i++) {
+        for (let i = 0; i < 10; i++) {
             await common.sleep(100)
             await e.group.pokeMember(e.operator_id)}
         }
