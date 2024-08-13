@@ -6,7 +6,7 @@ from datetime import datetime,time
 def calculate_a_value(target_date):
     # 基准日期和基准值
     base_date = datetime(2024, 7, 31)
-    base_value = 585
+    base_value = 583
 
     # 将目标日期字符串转换为datetime对象
     target_date = datetime.strptime(target_date, '%Y-%m-%d')
@@ -29,10 +29,11 @@ else:
     bool = False
 
 
-current_date = time.strftime("%Y-%m-%d")
+current_date = datetime.now().strftime("%Y-%m-%d")
 a_value = calculate_a_value(current_date)
-if bool!=True:
-    a_value -= 1
+if bool==False:
+    a_value = a_value - 1
+print(f'当前日期：{current_date}，a值：{a_value}')
 res = requests.get(f'https://www.qqorw.cn/mrzb/{a_value}.html')
 response = res.text
 soup = BeautifulSoup(response, 'html.parser')

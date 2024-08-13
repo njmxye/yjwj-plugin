@@ -2,12 +2,14 @@ import plugin from '../../../lib/plugins/plugin.js'
 import '../../../lib/plugins/loader.js'
 import{ execSync } from 'child_process';
 import fs from 'fs';
+import _ from 'lodash'
 import path from 'path'
 import fetch from 'node-fetch'
 import os from 'os'
 // 检查是否有data/ys-dio-pic文件夹，没有则创建
 let queueDict = {};
 let prom = 'kimi'
+let vj='战绩'
 let imgfol = './data/yjwjimg'
 let queue1 = './plugins/yjwj-plugin/sundry/queue1.json'
 if (!fs.existsSync(queue1)) {
@@ -17,6 +19,7 @@ let memeDir = './plugins/yjwj-plugin/sundry/meme'
 if (!fs.existsSync(imgfol)) {
   fs.mkdirSync(imgfol)
 }
+
 export class setting extends plugin {
     constructor() {
         super({
@@ -51,20 +54,16 @@ export class setting extends plugin {
                     fnc: 'update_config'
                 },
                 {
-                    reg: '^开启km$',
-                    fnc: 'kimiopen'
-                },
-                {
-                    reg: `^${prom}`,
-                    fnc: 'kimi'
-                },
-                {
                     reg: '^表情包$',
                     fnc: 'meme'
                 },
                 {
                     reg: '^#预约$',
                     fnc:'queue'
+                },
+                {
+                    reg: '^(胡桃|季季莹|迦南|顾清寒|沈妙|水娘|妖刀|紫萍|狐狸).*$',
+                    fnc: 'audio'
                 },
                 {
                     reg: '^#取消$',
@@ -78,65 +77,64 @@ export class setting extends plugin {
                 {
                     reg: '^#预约列表$',
                     fnc: 'queuelist_total'
-                },
-                {
-                    reg: '^#手游列表$',
-                    fnc: 'queuelist_mobile'
-                },
-                {
-                    reg: '^#端游列表$',
-                    fnc: 'queuelist_pc'
-                },
-                {
-                    reg: '^#自定义房间列表$',
-                    fnc: 'custom_room_list'
-                },
-                {
-                    reg: '^#自定义房间添加$',
-                    fnc: 'custom_room_add'
-                },
-                {
-                    reg: '^#自定义房间删除$',
-                    fnc: 'custom_room_del'
-                },
-                {
-                    reg: '^#排行榜列表$',
-                    fnc: 'chart_list'
-                },
-                {
-                    reg: '^#排行榜添加$',
-                    fnc: 'chart_add'
-                },
-                {
-                    reg: '^#排行榜删除$',
-                    fnc: 'chart_del'
-                },
-                {
-                    reg: '^逆天.*$',
-                    fnc: 'tieba_sb'
-                },
-                {
-                    reg: '^劫批.*$',
-                    fnc: 'tieba_jb'
                 }
             ]
         })
     }
+    async audio(e) {
+        let reg = new RegExp('^#(胡桃|季季莹|迦南|顾清寒|沈妙|水娘|妖刀|紫萍|狐狸)语音(.*)$')
+        let regRet = reg.exec(e.msg)
+        if (!regRet) return false;
+        let hero = null
+        function randomaud() {
+            const path = process.cwd() + './plugins/yjwj-plugin/sundry/audio/'+ hero;
+            const files = fs.readdirSync(path);
+            const audFiles = files.filter(file => file.endsWith('.mp3'));
+            const randomIndex = Math.floor(Math.random() * audFiles.length);
+            const audPath = `${path}/${audFiles[randomIndex]}`;
+            const aud = fs.readFileSync(audPath);
+            e.reply(segment.record(aud));
+        }
 
-    async kimiopen(e) {
-        e.reply('正在开启智能助手！')
-        execSync('python ./plugins/yjwj-plugin/sundry/intelligence/diaoyong.py');
-        e.reply('开启成功！你现在可以用kimi开头的指令来和智能助手对话！')
+        switch (regRet[1]) {
+            case '胡桃':
+                hero = 'kurumi'
+                randomaud()
+                break
+            case '季季莹':
+                hero = 'zaiji'
+                randomaud()
+                break
+            case '迦南':
+                hero = 'matari'
+                randomaud()
+                break
+            case '顾清寒':
+                hero = 'justinagu'
+                randomaud()
+                break
+            case '沈妙':
+                hero = 'feriashen'
+                randomaud()
+                break
+            case '水娘':
+                hero = 'valdacui'
+                randomaud()
+                break
+            case '妖刀':
+                hero = 'yotohime'
+                randomaud()
+                break
+            case '紫萍':
+                hero = 'zipingyin'
+                randomaud()
+                break
+            case '狐狸':
+                hero = 'tessa'
+                randomaud()
+                break
+        }
     }
-    async kimi(e) {
-        let msg = _.trimStart(e.msg, prom);
-        fs.writeFileSync('./plugins/yjwj-plugin/sundry/intelligence/question.json', JSON.stringify(msg), 'utf8');
-        execSync('python ./plugins/yjwj-plugin/sundry/intelligence/diaoyong2.py');
-        e.reply('如果调用失败，请检查插件sundry/intelligence/config.json文件是否正确配置，正确配置应该在Bearer空格后面填写你的kimiToken！！！')
-
-    }
-
-
     async queue(e) {   
         let a = 'http://q2.qlogo.cn/headimg_dl?dst_uin=' + e.user_id + '&spec=5';
         let queueData = {
@@ -200,11 +198,6 @@ export class setting extends plugin {
         fs.writeFileSync(queue1, JSON.stringify([]));
         e.reply('预约列表已清空！')
     }
-
-
-
-
-
 
     async queueout(e) {   
             let queueData = await fs.promises.readFile(queue1, 'utf8');
@@ -304,8 +297,6 @@ export class setting extends plugin {
             '10. 输入#预约清空\n清空预约列表\n',
             '11. 输入今日早报\n获取每天60秒新闻\n',
             '12. 输入#早报更新\n更新新闻文件\n',
-            '13. 输入开启km\n查看排行榜\n',
-            '14. 输入kimi……（省略的是你要提的问题，记住问中文问题会乱码，以后会解决！）\n和kimi进行对话\n',
             '我身无拘  武道无穷！\n',
             '咱们群里上过修罗的，记得和群主要修罗头衔！'
             
@@ -341,7 +332,6 @@ export class setting extends plugin {
 
     async news(e) {
         if (fs.existsSync('news.json')) {  
-            this.newsupdate(e)
             try {
                 const fileContent = fs.readFileSync('news.json', 'utf8');
                 console.log('数据获取成功');
@@ -362,5 +352,6 @@ export class setting extends plugin {
     } 
 
 }
+
 
 
