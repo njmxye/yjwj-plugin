@@ -5,6 +5,8 @@ import fs from 'fs';
 import _ from 'lodash'
 import path from 'path'
 import fetch from 'node-fetch'
+import common from'../../../lib/common/common.js'
+import ffmpeg from 'fluent-ffmpeg';
 import os from 'os'
 // 检查是否有data/ys-dio-pic文件夹，没有则创建
 let queueDict = {};
@@ -19,6 +21,8 @@ let memeDir = './plugins/yjwj-plugin/sundry/meme'
 if (!fs.existsSync(imgfol)) {
   fs.mkdirSync(imgfol)
 }
+
+
 
 export class setting extends plugin {
     constructor() {
@@ -82,55 +86,79 @@ export class setting extends plugin {
         })
     }
     async audio(e) {
-        let reg = new RegExp('^#(胡桃|季季莹|迦南|顾清寒|沈妙|水娘|妖刀|紫萍|狐狸)语音(.*)$')
+        let reg = new RegExp('^(胡桃|季季莹|迦南|顾清寒|沈妙|水娘|妖刀|紫萍|狐狸|大厅).*$')
         let regRet = reg.exec(e.msg)
         if (!regRet) return false;
         let hero = null
         function randomaud() {
-            const path = process.cwd() + './plugins/yjwj-plugin/sundry/audio/'+ hero;
+            const path = process.cwd() + '/plugins/yjwj-plugin/sundry/audio/' + hero;
             const files = fs.readdirSync(path);
             const audFiles = files.filter(file => file.endsWith('.mp3'));
             const randomIndex = Math.floor(Math.random() * audFiles.length);
             const audPath = `${path}/${audFiles[randomIndex]}`;
-            const aud = fs.readFileSync(audPath);
-            e.reply(segment.record(aud));
+            const zaudPath = './plugins/yjwj-plugin/sundry/audio/zero.mp3';
+            e.reply(segment.record(audPath));
         }
 
         switch (regRet[1]) {
             case '胡桃':
                 hero = 'kurumi'
                 randomaud()
+                randomaud()
+                randomaud()
+                randomaud()
+                randomaud()
                 break
             case '季季莹':
                 hero = 'zaiji'
+                randomaud()
+                randomaud()
                 randomaud()
                 break
             case '迦南':
                 hero = 'matari'
                 randomaud()
+                randomaud()
+                randomaud()
                 break
             case '顾清寒':
                 hero = 'justinagu'
+                randomaud()
+                randomaud()
                 randomaud()
                 break
             case '沈妙':
                 hero = 'feriashen'
                 randomaud()
+                randomaud()
+                randomaud()
                 break
             case '水娘':
                 hero = 'valdacui'
+                randomaud()
+                randomaud()
                 randomaud()
                 break
             case '妖刀':
                 hero = 'yotohime'
                 randomaud()
+                randomaud()
+                randomaud()
                 break
             case '紫萍':
                 hero = 'zipingyin'
                 randomaud()
+                randomaud()
+                randomaud()
                 break
             case '狐狸':
                 hero = 'tessa'
+                randomaud()
+                randomaud()
+                randomaud()
+                break
+            case '大厅':
+                hero = 'hall'
                 randomaud()
                 break
         }
@@ -297,6 +325,8 @@ export class setting extends plugin {
             '10. 输入#预约清空\n清空预约列表\n',
             '11. 输入今日早报\n获取每天60秒新闻\n',
             '12. 输入#早报更新\n更新新闻文件\n',
+            '13. 输入(胡桃|季季莹|迦南|顾清寒|沈妙|水娘|妖刀|紫萍|狐狸)\n获取角色语音\n',
+            '14. 戳一戳机器人\n成功被机器人复仇！\n',
             '我身无拘  武道无穷！\n',
             '咱们群里上过修罗的，记得和群主要修罗头衔！'
             
