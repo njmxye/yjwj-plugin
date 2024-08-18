@@ -1,12 +1,12 @@
-# 🌌 永劫无间插件 —— yjwj-Plugin 🌠
+# 🌌 永劫无间插件 —— yjwj-plugin 🌠
 
 ### 🎉 欢迎来到永劫无间插件的世界，这里充满了无限可能与惊喜！
 
-### 🚀 探索永劫无间，让 yjwj-Plugin 成为你的冒险伙伴！
+### 🚀 探索永劫无间，让 yjwj-plugin 成为你的冒险伙伴！
 
 ## 🎨 功能特色
 
-### 很遗憾的是，笔者需要上学背八股【高考】，整个插件的大项目会咕咕一段时间【可能是一坤年？】。s
+### 很遗憾的是，笔者需要上学背八股【高考】，整个插件的大项目会间歇性咕咕一段时间【可能是一坤年？】。s
 
 # 装之前一定要看注意事项和现有BUG标注！！！
 
@@ -21,7 +21,7 @@
    - 同步自己的战绩，魂玉伤害排名系统全追踪！
 
 4. **逆天语录宝典 —— 劫圈语录** 📖
-   - 贴吧的逆天语录，乐子人启动！（克烈怎么和营销号吵起来的………）
+   - 贴吧的逆天语录，乐子人启动！（克烈为什么被组了……）
 
 5. **B站视频精选 —— 视频链接获取** 📺
    - 随机推荐B站上的永劫无间精彩视频。
@@ -54,8 +54,6 @@
 - **社区互动增强**：通过插件加强玩家间的交流，打造更加紧密的游戏社区。
 
 ## 🌈 快速入门
-
-**安装Python环境**: 不用我教吧。
 **选择Yunzai 插件目录 📁**: 
 ```bash
 cd Miao-Yunzai/plugins
@@ -65,26 +63,15 @@ cd Miao-Yunzai/plugins
 git clone https://github.com/njmxye/yjwj-plugin.git
 ```  
 **安装依赖项 📦**:
-```bash
-cd yjwj-plugin
-pip install -r requirements.txt
-cd sundry
-cd intelligence
-pip install -r requirements.txt
-```
 **配置插件 ⚙️**:
 编辑 yjwj-plugin/sundry/intelligence/config.json 文件，配置你的插件参数。
 格式为{"token": "12345678", "auth_token": "Bearer ", "refresh_token": "Bearer "}
 修改后两项为Bearer空格后填你的kimitoken，具体token获取方法见kimi官网或者百度！
-
+## kimi还没写完(这个什么cookies你其实先不用填，等我有时间逆一下参数自动登录生成就好了。可以期待一下。)
 **启动插件 🚀**:
 输入“永劫帮助”，查看插件的功能。
-
 ## 注意⚠️
-- 请确保你的 Python 环境已经安装并配置正确。
-- **切记！**  时雨星空trss.me的脚本tsab版崽子如果环境用的arch linux，需要自行配置虚拟python环境，并在tsab前actived你的虚拟python环境！
-- 如果pip install速度慢或报错，请自行更换清华大学镜像源！
-
+没什么可注意的。
 - **切记！**  有能力者欢迎来改bug！
 # 现有BUG！
 - **bug1！**  kimi功能没写完，因为我钱买api服务器！想用的自己去我gitee主页去看吧！[kimi逆向工程](https://gitee.com/njmxye/kimi-reverse)
@@ -92,9 +79,9 @@ pip install -r requirements.txt
 - **bug3！**  网易大神战绩榜的爬虫写完了！但是不是用js写的，而是用py写的。所以，想用的去我gitee主页自己去看吧。[网易大神战绩榜爬虫](https://gitee.com/njmxye/yjwj-spider)
 ### 👏 贡献者邀请
 
-- 如果你有创意或发现问题，欢迎提交 issue 或 pull request，一起让 yjwj-Plugin 更加完善！
+- 如果你有创意或发现问题，欢迎提交 issue 或 pull request，一起让 yjwj-plugin 更加完善！
 - 如果你有能力开发或者热爱永劫无间相关事宜，欢迎提供开发帮助与修复bug！（作者qq群966160338，入群答案填好就可以。）
-- 如果你喜欢 yjwj-Plugin，请给个 star，让我们一起分享和进步！
+- 如果你喜欢 yjwj-plugin，请给个 star，让我们一起分享和进步！
 
 ### 📌 未来展望
 
@@ -104,11 +91,10 @@ pip install -r requirements.txt
 
 ### 🎉 加入我们
 
-- **准备好了吗？** 让我们一起在永劫无间中探索未知，yjwj-Plugin 将是你最佳的伙伴！
-
+- **准备好了吗？** 让我们一起在永劫无间中探索未知，yjwj-plugin 将是你最佳的伙伴！
 ---
 
-🌠 **永劫无间，无限可能，yjwj-Plugin 与你同在，照亮你的冒险之路！** 🌠
+🌠 **永劫无间，无限可能，yjwj-plugin 与你同在，照亮你的冒险之路！** 🌠
 
 ### 📜 **联系我们**
 
@@ -122,4 +108,6 @@ pip install -r requirements.txt
 - [网易大神战绩榜爬虫](https://gitee.com/njmxye/yjwj-spider)
 - [kimi逆向工程](https://gitee.com/njmxye/kimi-reverse)
 ## 欢迎来点star！
+# 更新日志：
+-24.8.19 重磅更新，爬虫全部js化。我倒是把这语言给学会了（快来夸我
 

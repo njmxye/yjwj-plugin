@@ -5,8 +5,14 @@ import fs from 'fs';
 import _ from 'lodash'
 import path from 'path'
 import fetch from 'node-fetch'
+const axios = require('axios');
+const puppeteer = require('puppeteer') 
+const { JSDOM } = require('jsdom');
+const cheerio = require('cheerio');
+var imgurls = [];
 import common from'../../../lib/common/common.js'
 import os from 'os'
+import { segment } from 'icqq';
 // 检查是否有data/ys-dio-pic文件夹，没有则创建
 let queueDict = {};
 let prom = 'kimi'
@@ -37,17 +43,21 @@ export class setting extends plugin {
                     permission: 'master'
                 },
                 {
-                    reg: '^今日早报$',
+                    reg: '^新闻$',
                     fnc: 'news'
-                },
-                {
-                    reg: '^#早报更新$',
-                    fnc: 'newsupdate'
                 },
                 {
                     reg: '^海报.*$',
                     fnc: 'imgmanual'
-                },       
+                },
+                {
+                    reg: '^fufu$',
+                    fnc: 'fufu'
+                },
+                {
+                    reg: '^fufuupdate$',
+                    fnc: 'fufuupdate'
+                },
                 {
                     reg: '^永劫帮助$',
                     fnc: 'help'
@@ -83,6 +93,71 @@ export class setting extends plugin {
                 }
             ]
         })
+    }
+    async fufu(e) {  
+    const data = await fs.promises.readFile('./plugins/yjwj-plugin/sundry/fufu/fufu.json', 'utf-8');  
+    const jsonData = JSON.parse(data);  
+    
+    while (jsonData.length === 0) {  
+        e.reply("暂无表情包，正在获取图片数据...")
+        await this.fufu_update(e);  
+        const updatedData = await fs.promises.readFile('./plugins/yjwj-plugin/sundry/fufu/fufu.json', 'utf-8');  
+        jsonData = JSON.parse(updatedData);  
+    }  
+    
+    const randomIndex = Math.floor(Math.random() * jsonData.length);  
+    const randomValue = jsonData[randomIndex];  
+    e.reply(segment.image(randomValue));  
+    e.reply("上帝说要有未来= =、");  
+    }
+
+
+    async fufu_update(e){
+        async function sendRequest(url) {
+            const headers = {
+            "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+            "accept-language": "zh-CN,zh;q=0.9",
+            "cache-control": "max-age=0",
+            "priority": "u=0, i",
+            "referer": "https://cn.bing.com/",
+            "sec-ch-ua-mobile": "?0",
+            "sec-fetch-dest": "document",
+            "sec-fetch-mode": "navigate",
+            "sec-fetch-site": "cross-site",
+            "sec-fetch-user": "?1",
+            "upgrade-insecure-requests": "1",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 Edg/127.0.0.0"
+          }
+          
+            const response = await axios.get(url, { headers }); // 发送GET请求
+            //fs.writeFileSync(filenames, response.data, 'utf-8');
+            const htmldata=response.data;
+            const dom = new JSDOM(htmldata).window.document;
+            const imagestags = dom.getElementsByTagName('img');
+            for (let i=0;i<imagestags.length;i++){
+                const datasrc = imagestags[i].getAttribute('data-src');
+                if (datasrc){
+                    imgurls.push(datasrc);
+                }
+            }
+            return imgurls;
+          
+          }
+          async function writetojsons(imgurls){
+            fs.writeFileSync("./plugins/yjwj-plugin/sundry/fufu/fufu.json", JSON.stringify(imgurls, null, '\n'), 'utf-8');
+            return 1;
+          }
+          
+          const imgurl1 = sendRequest('https://www.bilibili.com/read/cv18799777/');
+          const imgurl2 = sendRequest('https://www.bilibili.com/read/cv19884404/');
+          Promise.all([imgurl1, imgurl2])
+           .then(results => {
+              const finalImgUrls = results.reduce((acc, result) => acc.concat(result), []);
+              imgurls = finalImgUrls;
+              console.log(imgurls);
+              writetojsons(imgurls);
+              e.reply('表情包文件更新成功！');
+            })
     }
     async audio(e) {
         let reg = new RegExp('^(胡桃|季季莹|迦南|顾清寒|沈妙|水娘|妖刀|紫萍|狐狸|大厅).*$')
@@ -322,10 +397,10 @@ export class setting extends plugin {
             '8. 输入#取消\n取消排队\n',
             '9. 输入#yj更新\n更新永劫插件\n',
             '10. 输入#预约清空\n清空预约列表\n',
-            '11. 输入今日早报\n获取每天60秒新闻\n',
-            '12. 输入#早报更新\n更新新闻文件\n',
+            '11. 输入新闻\n返回今日新闻图片\n',
+            '12. 输入fufu\n随机返回一个fufu表情包\n',
             '13. 输入(胡桃|季季莹|迦南|顾清寒|沈妙|水娘|妖刀|紫萍|狐狸)\n获取角色语音\n',
-            '14. 戳一戳机器人\n成功被机器人复仇！\n',
+            '14. 戳一下机器人\n成功被机器人复仇16下！\n',
             '我身无拘  武道无穷！\n',
             '咱们群里上过修罗的，记得和群主要修罗头衔！'
             
@@ -333,51 +408,140 @@ export class setting extends plugin {
         return true
     }
     async update_config(e) {
-        await e.reply('正在更新配置文件……')
+        const finalList = [];
+        const headersTongyong = {
+        "accept": "image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8",
+        "accept-language": "zh-CN,zh;q=0.9",
+        "cache-control": "no-cache",
+        "pragma": "no-cache",
+        "priority": "i",
+        "referer": "https://www.yjwujian.cn/media/",
+        "sec-ch-ua-mobile": "?0",
+        "sec-fetch-dest": "image",
+        "sec-fetch-mode": "no-cors",
+        "sec-fetch-site": "cross-site",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 Edg/127.0.0.0",
+        "x-requested-with": "XMLHttpRequest"
+        };
+
+        async function downloadImages(url, folderName) {
         try {
-            // 使用 execSync 确保命令执行完再继续后面的步骤。
-            execSync('python ./plugins/yjwj-plugin/apps/imgv1.2.py');
-            e.reply("图源更新成功");
-        } catch (err) {
-            console.error("图源更新出错：", err);
-            e.reply("图源更新出错");
-            // 如果需要，你可以选择在这里输出错误信息
-            e.reply(err.toString());
+            const response = await axios.get(url, { headers: headersTongyong });
+            const $ = cheerio.load(response.data);
+            const imgTags = $('img');
+
+            if (!fs.existsSync(folderName)) {
+            fs.mkdirSync(folderName, { recursive: true });
+            }
+
+            let i = 0;
+            imgTags.each((index, element) => {
+            i++;
+            const imgSrc = $(element).attr('src');
+            finalList.push(imgSrc);
+            });
+
+            console.log(`成功获取 ${i} 张图片的URL列表。`);
+
+        } catch (error) {
+            console.error(`An error occurred: ${error}`);
+        } finally {
+            console.log("获取的图片链接列表成功");
         }
-    }
-    async newsupdate(e) {
-        await e.reply('正在更新新闻文件……')
+        }
+
+        async function downloadImages2(url, folderName) {
         try {
-            // 使用 execSync 确保命令执行完再继续后面的步骤。
-            execSync('python ./plugins/yjwj-plugin/apps/news.py');
-            e.reply("新闻更新成功");
-        } catch (err) {
-            console.error("新闻更新出错：", err);
-            e.reply("新闻更新出错");
-            // 如果需要，你可以选择在这里输出错误信息
-            e.reply(err.toString());
+            const response = await axios.get(url, { headers: headersTongyong });
+            const $ = cheerio.load(response.data);
+            const imgTags = $('.item');
+
+            if (!fs.existsSync(folderName)) {
+            fs.mkdirSync(folderName, { recursive: true });
+            }
+
+            let i = 0;
+            imgTags.each((index, element) => {
+            i++;
+            const imgSrc = $(element).attr('data-thumb');
+            finalList.push(imgSrc);
+            });
+
+            console.log(`成功获取 ${i} 张图片的URL列表。`);
+
+        } catch (error) {
+            console.error(`An error occurred: ${error}`);
+        } finally {
+            console.log("获取的图片链接列表成功");
         }
+        }
+
+        async function main() {
+        // 下载海报
+        const haibaoUrl = "https://www.yjwujian.cn/media/#/pic";
+        const haibaoFolderName = "yjwujian_images/haibao";
+        await downloadImages(haibaoUrl, haibaoFolderName);
+
+        // 下载截图
+        const jietuUrl = "https://www.yjwujian.cn/media/#/screenshot";
+        const jietuFolderName = "yjwujian_images/jietu";
+        await downloadImages(jietuUrl, jietuFolderName);
+
+        let num = 2;
+        for (let i = 1; i < 20; i++) {
+            // 下载更多海报
+            const haibaoUrl = `https://www.yjwujian.cn/inline/20v2/wallpaper/pic_index_${num}.html`;
+            await downloadImages2(haibaoUrl, haibaoFolderName);
+            num += 1;
+        }
+
+        num = 2;
+        for (let i = 1; i < 20; i++) {
+            // 下载更多截图
+            const jietuUrl = `https://www.yjwujian.cn/inline/20v1/printscreen/pic_index_${num}.html`;
+            await downloadImages2(jietuUrl, jietuFolderName);
+            num += 1;
+        }
+
+        const newFinalList = finalList.filter(url => url.length >= 83);
+        console.log("本次爬取到url数量如下:", newFinalList.length);
+        console.log("最终的图片链接列表如下：");
+        newFinalList.forEach(url => console.log(url));
+        return newFinalList;
+        }
+
+        async function downWithJson(list) {
+        const data = list.join('\n');
+        fs.writeFileSync('./plugins/yjwj-plugin/sundry/pic/urlconfig.json', data);
+        }
+
+        async function run() {
+        const list = await main();
+        await downWithJson(list);
+        console.log('json文件生成成功！');
+        }
+
+        run();
     }
 
     async news(e) {
-        if (fs.existsSync('news.json')) {  
-            try {
-                const fileContent = fs.readFileSync('news.json', 'utf8');
-                console.log('数据获取成功');
-                const jsonData = JSON.parse(fileContent);
-                jsonData.forEach(item => {
-                    if (item!== "") {
-                        e.reply(item);
-                    }
-                });
-            } catch (err) {
-                console.error("读取文件内出错：", err);
-                e.reply('数据读取失败，请检查配置文件');
-                e.reply(err.toString());
-            }
-        } else {
-            await e.reply('数据获取失败，请使用[#早报更新]更新配置文件');
+        function news() {
+            let url = 'https://readhub.cn/daily'
+            const browser = puppeteer.launch({
+                headless: true,
+            })  
+            const page = browser.newPage()
+            page.setViewport({
+                width: 800,
+                height: 600,
+            })
+            page.goto(url, { waitUntil: 'domcontentloaded' })
+            page.screenshot({ path: './plugins/yjwj-plugin/sundry/news/news.png', fullPage: true })
+            browser.close()
         }
+        news();
+        e.reply(segment.image('./plugins/yjwj-plugin/sundry/news/news.png'));
+        e.reply('今天的新闻获取成功了。你真是个爱看新闻的好孩子。');
     } 
 
 }
