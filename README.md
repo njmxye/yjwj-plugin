@@ -74,7 +74,7 @@ git clone https://github.com/njmxye/yjwj-plugin.git
 没什么可注意的。
 - **切记！**  有能力者欢迎来改bug！
 # 现有BUG！
-- **bug1！**  kimi功能没写完，因为我钱买api服务器！想用的自己去我gitee主页去看吧！[kimi逆向工程](https://gitee.com/njmxye/kimi-reverse)
+- **bug1！**  kimi功能没写完，因为我没钱买api服务器！想用的自己去我gitee主页去看吧！[kimi逆向工程](https://gitee.com/njmxye/kimi-reverse)
 - **bug2（算不上大bug）！**  永劫影画廊的爬虫逻辑没有考虑到js动态加载和缩略图的事情，导致现在获取的图源是缩略图，部分画质很差，一半的海报还是比较清晰。
 - **bug3！**  网易大神战绩榜的爬虫写完了！但是不是用js写的，而是用py写的。所以，想用的去我gitee主页自己去看吧。[网易大神战绩榜爬虫](https://gitee.com/njmxye/yjwj-spider)
 ### 👏 贡献者邀请
