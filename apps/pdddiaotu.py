@@ -20,13 +20,13 @@ headers = {
 }
 
 data={
-  "page": 7,
-  "size": 20,
-  "sort": 0,
-  "optId": 10232,
-  "level": 2,
-  "url": "",
-  "propertyItems": []
+    "page": 1,
+    "size": 20,
+    "sort": 0,
+    "optId": 22224,
+    "level": 2,
+    "url": "",
+    "propertyItems": []
 }
 data = json.dumps(data, separators=(',', ':'))
 

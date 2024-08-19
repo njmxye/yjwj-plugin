@@ -5,7 +5,7 @@ import fs from 'fs';
 import _ from 'lodash'
 import path from 'path'
 import fetch from 'node-fetch'
-const axios = require('axios');
+import axios from 'axios'
 const puppeteer = require('puppeteer') 
 const { JSDOM } = require('jsdom');
 const cheerio = require('cheerio');
