@@ -136,5 +136,5 @@ git clone https://github.com/njmxye/yjwj-plugin.git
 - [kimi逆向工程](https://gitee.com/njmxye/kimi-reverse)
 ## 欢迎来点star！
 # 更新日志：
--24.8.19 重磅更新，爬虫全部js化。我倒是把这语言给学会了（快来夸我
--24.8.20 被axios的报错玩坏了……为什么requests库就能不报错axios就不行呢？！
+- 24.8.19 重磅更新，爬虫全部js化。我倒是把这语言给学会了（快来夸我
+- 24.8.20 被axios的报错玩坏了……为什么requests库就能不报错axios就不行呢？！
